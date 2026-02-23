@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centre Parcs Packing List 🌲</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1a3a2a;
+    --forest-mid: #2d5a3d;
+    --forest-light: #3d7a52;
+    --leaf: #5aad6f;
+    --mint: #a8d5b0;
+    --cream: #fdf8f0;
+    --warm: #f5ede0;
+    --amber: #e8a44a;
+    --text: #1a2e1f;
+    --muted: #6b8c73;
+    --border: rgba(90,173,111,0.2);
+    --card: #ffffff;
+    --light-green: #e8f5ec;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(160deg, var(--forest) 0%, var(--forest-mid) 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 48px 24px 64px;
+    text-align: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(93,173,111,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(61,122,82,0.25) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+
+  .hero-emoji {
+    font-size: 3.2rem;
+    display: inline-block;
+    margin-bottom: 10px;
+    animation: sway 4s ease-in-out infinite;
+  }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50%       { transform: rotate(3deg); }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    color: var(--mint);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .hero-sub {
+    color: rgba(168,213,176,0.7);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Tree silhouette */
+  .trees {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    width: 100%; height: 48px;
+  }
+
+  /* Save status */
+  .save-status {
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    background: var(--forest);
+    color: rgba(168,213,176,0.8);
+    letter-spacing: 0.06em;
+    min-height: 34px;
+  }
+
+  .save-status.saving { color: var(--amber); }
+  .save-status.saved  { color: var(--mint); }
+  .save-status.error  { color: #ff7b7b; }
+
+  /* Progress */
+  .progress-wrap {
+    background: var(--warm);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .progress-bar-bg {
+    flex: 1;
+    height: 10px;
+    background: rgba(90,173,111,0.15);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--leaf), var(--amber));
+    border-radius: 99px;
+    transition: width 0.4s cubic-bezier(.34,1.56,.64,1);
+    width: 0%;
+  }
+
+  .progress-text {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--forest-mid);
+    white-space: nowrap;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px 20px 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .btn-tool {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-tool:hover {
+    background: var(--forest);
+    color: var(--mint);
+    border-color: var(--forest);
+    transform: translateY(-1px);
+  }
+
+  /* Container */
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px 20px 80px;
+  }
+
+  /* Section card */
+  .section {
+    background: var(--card);
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    margin-bottom: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(26,58,42,0.06);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    background: linear-gradient(135deg, var(--forest) 0%, var(--forest-mid) 100%);
+    transition: opacity 0.15s;
+  }
+
+  .section-header:hover { opacity: 0.9; }
+
+  .section-icon  { font-size: 1.3rem; flex-shrink: 0; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--mint);
+    flex: 1;
+  }
+
+  .section-count {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: rgba(168,213,176,0.7);
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 3px 10px;
+  }
+
+  .section-chevron {
+    color: rgba(168,213,176,0.6);
+    font-size: 0.85rem;
+    transition: transform 0.3s;
+    display: inline-block;
+  }
+
+  .section.collapsed .section-chevron { transform: rotate(-90deg); }
+
+  .section-body {
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s;
+  }
+
+  .section.collapsed .section-body {
+    max-height: 0 !important;
+    opacity: 0;
+  }
+
+  /* Item row */
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 20px;
+    border-bottom: 1px solid rgba(90,173,111,0.07);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  .item:last-child { border-bottom: none; }
+  .item:hover      { background: rgba(90,173,111,0.05); }
+  .item.checked    { background: rgba(90,173,111,0.04); }
+
+  .check-box {
+    width: 22px; height: 22px;
+    border-radius: 7px;
+    border: 2px solid var(--mint);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s cubic-bezier(.34,1.56,.64,1);
+    background: white;
+  }
+
+  .item.checked .check-box {
+    background: var(--leaf);
+    border-color: var(--leaf);
+  }
+
+  .check-tick {
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .item.checked .check-tick { opacity: 1; }
+
+  .item-label {
+    flex: 1;
+    font-size: 0.93rem;
+    font-weight: 600;
+    color: var(--text);
+    transition: color 0.2s;
+    line-height: 1.4;
+  }
+
+  .item.checked .item-label {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--mint);
+  }
+
+  /* Add item row */
+  .add-row {
+    display: flex;
+    gap: 8px;
+    padding: 10px 20px 14px;
+    border-top: 1px dashed rgba(90,173,111,0.2);
+  }
+
+  .add-input {
+    flex: 1;
+    background: var(--warm);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .add-input:focus { border-color: var(--leaf); }
+  .add-input::placeholder { color: var(--muted); }
+
+  .add-btn {
+    background: var(--forest);
+    border: none;
+    border-radius: 10px;
+    width: 36px; height: 36px;
+    color: var(--mint);
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .add-btn:hover { background: var(--forest-light); transform: scale(1.08); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--forest);
+    color: var(--mint);
+    border-radius: 14px;
+    padding: 12px 24px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    z-index: 9999;
+    transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* Confetti */
+  .confetti-container {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 999;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 9px; height: 9px;
+    border-radius: 2px;
+    animation: fall 1.4s ease-in forwards;
+  }
+
+  @keyframes fall {
+    0%   { opacity: 1; transform: translateY(-10px) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(90vh) rotate(800deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="confetti-container" id="confetti"></div>
+<div class="toast" id="toast"></div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-emoji">🌲</div>
+    <h1>Centre Parcs<br>Packing List</h1>
+    <p class="hero-sub">Thu–Mon · 2 Adults · 1 Toddler</p>
+  </div>
+  <svg class="trees" viewBox="0 0 1200 48" preserveAspectRatio="none" fill="#fdf8f0">
+    <path d="M0,48 L0,28 L30,8 L60,28 L60,18 L90,0 L120,18 L120,28 L150,10 L180,28 L180,20 L210,4 L240,20 L240,28 L270,12 L300,28 L300,18 L330,2 L360,18 L360,28 L390,8 L420,28 L420,15 L450,0 L480,15 L480,28 L510,10 L540,28 L540,20 L570,5 L600,20 L600,28 L630,12 L660,28 L660,18 L690,3 L720,18 L720,28 L750,8 L780,28 L780,15 L810,1 L840,15 L840,28 L870,10 L900,28 L900,20 L930,6 L960,20 L960,28 L990,12 L1020,28 L1020,18 L1050,2 L1080,18 L1080,28 L1110,8 L1140,28 L1140,15 L1170,0 L1200,15 L1200,48 Z"/>
+  </svg>
+</div>
+
+<!-- Save status -->
+<div class="save-status saved" id="saveStatus">☁️ Loading your list...</div>
+
+<!-- Progress -->
+<div class="progress-wrap">
+  <span style="font-size:1.2rem">🎒</span>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 0</div>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <button class="btn-tool" onclick="expandAll()">📂 Expand All</button>
+  <button class="btn-tool" onclick="collapseAll()">📁 Collapse All</button>
+  <button class="btn-tool" onclick="resetAll()">🔄 Reset</button>
+</div>
+
+<div class="container" id="listsContainer"></div>
+
+<script>
+const STORAGE_KEY = 'centre-parcs-packing-lucy';
+
+const SECTIONS = [
+  { id:'clothing',  icon:'👕', title:'Clothing',             items:['Outfits for 4 days + 1 spare each','Extra outfits for child (2–3 spares)','Warm jumpers/fleeces','Waterproof coats','Hats, gloves, scarves','Slippers','Pyjamas','Underwear','Extra socks','Walking shoes','Flip-flops (pool/spa)'] },
+  { id:'toiletries',icon:'🪥', title:'Toiletries & Health',  items:['Toothbrushes and toothpaste','Deodorant','Shampoo and conditioner','Body wash','Hairbrush and hair ties','Skincare products','Razor','Calpol','Thermometer','Plasters','Daily medications','Nappy cream (if needed)','Tissues','Hand sanitiser'] },
+  { id:'spa',       icon:'🧖', title:'Spa Essentials',       items:['Flip-flops','Two swimsuits (adult)','Hairbrush and ties','Cleanser and moisturiser','Deodorant','Comfortable outfit for after spa','Water bottle','Book or magazine','Small toiletry pouch'] },
+  { id:'pool',      icon:'🏊', title:'Pool Essentials',      items:['Swimsuits for all','Swim nappies (if needed)','Goggles','Extra towels','Flip-flops','Plastic bags for wet items','Small backpack','Float/arm bands for child'] },
+  { id:'kitchen',   icon:'🍳', title:'Lodge Kitchen Basics', items:['Cooking oil','Salt and pepper','Basic spices','Foil','Cling film','Baking paper','Bin bags','Dishwasher tablets','Washing-up liquid and sponge','Tupperware','Tea, coffee, hot chocolate','Sugar or sweetener','Snacks and chocolate','Breakfast items','Easy evening meals','Juice or squash'] },
+  { id:'tech',      icon:'🔌', title:'Tech & Practical',     items:['Phone chargers','Extension lead','Power bank','Torch or nightlight','Bluetooth speaker','Headphones','Booking confirmations/screenshots'] },
+  { id:'toddler',   icon:'🧸', title:'Toddler Essentials',   items:['Comfort toy/blanket','Favourite cup/water bottle','Snacks','Two swimsuits','Warm hat and gloves','Spare outfits','Nightlight','Pushchair or carrier','Small toys or colouring items'] },
+  { id:'outdoors',  icon:'🥾', title:'Outdoors & Walking',   items:['Reusable water bottles','Ponchos','Hand warmers','Binoculars','Backpack','Gloves and hats'] },
+  { id:'luxuries',  icon:'✨', title:'Little Luxuries',       items:['Favourite snacks','Cosy blanket','Face mask or body lotion','Wine or fizz','Loungewear'] },
+  { id:'laundry',   icon:'🧺', title:'Optional Laundry',     items:['Small bottle of detergent','Laundry bag'] },
+];
+
+// ── State ────────────────────────────────────────────────────
+let state = {};
+let saving = false;
+
+function initState() {
+  SECTIONS.forEach(s => {
+    state[s.id] = state[s.id] || { checked: [], custom: [], collapsed: false };
+  });
+}
+
+// ── Cloud storage ────────────────────────────────────────────
+async function loadFromCloud() {
+  setStatus('saving', '☁️ Loading your list...');
+  try {
+    const result = await window.storage.get(STORAGE_KEY);
+    if (result) {
+      const data = JSON.parse(result.value);
+      SECTIONS.forEach(s => {
+        if (data[s.id]) {
+          state[s.id].checked   = data[s.id].checked   || [];
+          state[s.id].custom    = data[s.id].custom    || [];
+          state[s.id].collapsed = data[s.id].collapsed || false;
+        }
+      });
+    }
+    setStatus('saved', '✅ List loaded — happy packing!');
+  } catch(e) {
+    setStatus('error', '⚠️ Could not load saved list');
+  }
+  render();
+}
+
+async function saveToCloud() {
+  if (saving) return;
+  saving = true;
+  setStatus('saving', '💾 Saving...');
+  try {
+    await window.storage.set(STORAGE_KEY, JSON.stringify(state));
+    setStatus('saved', '✅ Progress saved');
+  } catch(e) {
+    setStatus('error', '⚠️ Could not save — changes may be lost');
+  }
+  saving = false;
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('saveStatus');
+  el.textContent = msg;
+  el.className = 'save-status ' + type;
+}
+
+// ── Actions ──────────────────────────────────────────────────
+function toggleItem(secId, idx) {
+  const s = state[secId];
+  const pos = s.checked.indexOf(idx);
+  if (pos > -1) s.checked.splice(pos, 1);
+  else s.checked.push(idx);
+
+  render();
+
+  // Section complete?
+  const sec = SECTIONS.find(s => s.id === secId);
+  const total = sec.items.length + state[secId].custom.length;
+  if (state[secId].checked.length === total && total > 0) {
+    burst(); showToast('🎉 ' + sec.title + ' — all packed!');
+  }
+
+  // Everything complete?
+  let allDone = true;
+  SECTIONS.forEach(s => {
+    const st = state[s.id];
+    if (st.checked.length < s.items.length + st.custom.length) allDone = false;
+  });
+  if (allDone) { setTimeout(() => { burst(); showToast('🌲 Everything packed! Have an amazing trip!'); }, 200); }
+
+  saveToCloud();
+}
+
+function toggleSection(id) {
+  state[id].collapsed = !state[id].collapsed;
+  render();
+  saveToCloud();
+}
+
+function addItem(secId) {
+  const input = document.getElementById('add-' + secId);
+  const val = input.value.trim();
+  if (!val) return;
+  state[secId].custom.push(val);
+  input.value = '';
+  render();
+  saveToCloud();
+  setTimeout(() => { const el = document.getElementById('add-' + secId); if (el) el.focus(); }, 50);
+}
+
+function expandAll()  { SECTIONS.forEach(s => { state[s.id].collapsed = false; }); render(); saveToCloud(); }
+function collapseAll(){ SECTIONS.forEach(s => { state[s.id].collapsed = true;  }); render(); saveToCloud(); }
+
+function resetAll() {
+  if (!confirm('Reset all checkboxes? Your custom items will be kept.')) return;
+  SECTIONS.forEach(s => { state[s.id].checked = []; });
+  render();
+  saveToCloud();
+  showToast('🔄 All items unchecked!');
+}
+
+// ── Render ───────────────────────────────────────────────────
+function render() {
+  const container = document.getElementById('listsContainer');
+  container.innerHTML = '';
+
+  let totalItems = 0, doneItems = 0;
+
+  SECTIONS.forEach((sec, si) => {
+    const st = state[sec.id];
+    const allItems = [...sec.items, ...st.custom];
+    const checkedCount = st.checked.length;
+    totalItems += allItems.length;
+    doneItems  += checkedCount;
+
+    const div = document.createElement('div');
+    div.className = 'section' + (st.collapsed ? ' collapsed' : '');
+    div.style.animationDelay = (si * 0.04) + 's';
+
+    const bodyStyle = st.collapsed ? 'max-height:0;opacity:0' : 'max-height:9999px;opacity:1';
+
+    div.innerHTML = `
+      <div class="section-header" onclick="toggleSection('${sec.id}')">
+        <span class="section-icon">${sec.icon}</span>
+        <span class="section-title">${sec.title}</span>
+        <span class="section-count">${checkedCount}/${allItems.length}</span>
+        <span class="section-chevron">▼</span>
+      </div>
+      <div class="section-body" style="${bodyStyle}">
+        ${allItems.map((item, i) => {
+          const checked = st.checked.includes(i);
+          return `
+            <div class="item${checked ? ' checked' : ''}" onclick="toggleItem('${sec.id}',${i})">
+              <div class="check-box">
+                <svg class="check-tick" width="11" height="9" viewBox="0 0 11 9">
+                  <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </div>
+              <span class="item-label">${esc(item)}</span>
+            </div>`;
+        }).join('')}
+        <div class="add-row">
+          <input class="add-input" id="add-${sec.id}" placeholder="Add your own item..." maxlength="80"
+            onkeydown="if(event.key==='Enter') addItem('${sec.id}')" />
+          <button class="add-btn" onclick="addItem('${sec.id}')">+</button>
+        </div>
+      </div>`;
+
+    container.appendChild(div);
+  });
+
+  // Update progress
+  const pct = totalItems ? (doneItems / totalItems * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = doneItems + ' / ' + totalItems;
+}
+
+// ── Helpers ──────────────────────────────────────────────────
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = 'toast'; }, 2800);
+}
+
+function burst() {
+  const c = document.getElementById('confetti');
+  const cols = ['#5aad6f','#e8a44a','#a8d5b0','#1a3a2a','#ffffff','#e8a44a'];
+  for (let i = 0; i < 45; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = (10 + Math.random() * 80) + '%';
+    el.style.top  = (Math.random() * 25) + '%';
+    el.style.background = cols[Math.floor(Math.random() * cols.length)];
+    el.style.animationDelay    = (Math.random() * 0.5) + 's';
+    el.style.animationDuration = (1 + Math.random() * 0.8) + 's';
+    c.appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
+}
+
+// ── Boot ─────────────────────────────────────────────────────
+initState();
+loadFromCloud();
+</script>
+</body>
+</html>
